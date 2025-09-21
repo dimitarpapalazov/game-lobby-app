@@ -75,7 +75,7 @@ export default function LobbyDetails() {
             <p>Players:</p>
             <ul>
                 {lobby?.players.map(p => (
-                    <li key={p.id}>p.email</li>
+                    <li key={p.id}>{p.email}</li>
                 ))}
             </ul>
             <div>

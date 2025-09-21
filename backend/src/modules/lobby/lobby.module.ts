@@ -10,16 +10,21 @@ import { LeaveLobbyHandler } from "./commands/handlers/leave-lobby.handler.js";
 import { GetLobbiesHandler } from "./queries/handlers/get-lobbies.handler.js";
 import { LobbyController } from "./lobby.controller.js";
 import { GetLobbyHandler } from "./queries/handlers/get-lobby.handler.js";
+import { KafkaModule } from "../../kafka/kafka.module.js";
+import { LobbyCreatedHandler, PlayerJoinedHandler, PlayerLeftHandler } from "./event-handlers/lobby.event-handlers.js";
 
 @Module({
-    imports: [TypeOrmModule.forFeature([Lobby, User]), CqrsModule],
+    imports: [TypeOrmModule.forFeature([Lobby, User]), CqrsModule, KafkaModule],
     providers: [
         LobbyService,
         CreateLobbyHandler,
         JoinLobbyHandler,
         LeaveLobbyHandler,
+        GetLobbyHandler,
         GetLobbiesHandler,
-        GetLobbyHandler
+        LobbyCreatedHandler,
+        PlayerJoinedHandler,
+        PlayerLeftHandler
     ],
     controllers: [LobbyController]
 })

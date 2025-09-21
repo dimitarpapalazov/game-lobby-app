@@ -1,15 +1,17 @@
-import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
+import { CommandHandler, EventBus, ICommandHandler } from "@nestjs/cqrs";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Lobby } from "../../lobby.entity.js";
 import { Repository } from "typeorm";
 import { User } from "../../../user/user.entity.js";
 import { JoinLobbyCommand } from "../join-lobby.command.js";
+import { PlayerJoinedLobbyEvent } from "../../events/player-joined.event.js";
 
 @CommandHandler(JoinLobbyCommand)
 export class JoinLobbyHandler implements ICommandHandler<JoinLobbyCommand> {
     constructor(
         @InjectRepository(Lobby) private lobbyRepo: Repository<Lobby>,
-        @InjectRepository(User) private userRepo: Repository<User>
+        @InjectRepository(User) private userRepo: Repository<User>,
+        private readonly eventBus: EventBus
     ) {}
 
     async execute(command: JoinLobbyCommand): Promise<Lobby> {
@@ -31,6 +33,8 @@ export class JoinLobbyHandler implements ICommandHandler<JoinLobbyCommand> {
         }
 
         lobby.players.push(user);
-        return this.lobbyRepo.save(lobby);
+        const saved = await this.lobbyRepo.save(lobby);
+        this.eventBus.publish(new PlayerJoinedLobbyEvent(saved.id, user.id));
+        return saved;
     }
 }
