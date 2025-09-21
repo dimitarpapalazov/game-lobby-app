@@ -1,3 +1,4 @@
+import { Cache, CACHE_MANAGER } from '@nestjs/cache-manager';
 import {
   Injectable,
   CanActivate,
@@ -6,13 +7,12 @@ import {
   Inject,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import Redis from 'ioredis';
 
 @Injectable()
 export class JwtAuthGuard implements CanActivate {
   constructor(
     private readonly jwtService: JwtService,
-    @Inject('REDIS_CLIENT') private readonly redisClient: Redis,
+    @Inject(CACHE_MANAGER) private readonly redisClient: Cache,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {

@@ -5,13 +5,16 @@ import { Lobby } from "../../lobby.entity.js";
 import { Repository } from "typeorm";
 import { User } from "../../../user/user.entity.js";
 import { LobbyCreatedEvent } from "../../events/lobby-created.event.js";
+import { Cache, CACHE_MANAGER } from "@nestjs/cache-manager";
+import { Inject } from "@nestjs/common";
 
 @CommandHandler(CreateLobbyCommand)
 export class CreateLobbyHandler implements ICommandHandler<CreateLobbyCommand> {
     constructor(
         @InjectRepository(Lobby) private lobbyRepo: Repository<Lobby>,
         @InjectRepository(User) private userRepo: Repository<User>,
-        private readonly eventBus: EventBus
+        private readonly eventBus: EventBus,
+        @Inject(CACHE_MANAGER) private cacheManager: Cache
     ) {}
 
     async execute(command: CreateLobbyCommand): Promise<Lobby> {
@@ -25,6 +28,7 @@ export class CreateLobbyHandler implements ICommandHandler<CreateLobbyCommand> {
         const lobby = this.lobbyRepo.create({ name, players: [creator] });
         const saved = await this.lobbyRepo.save(lobby);
         this.eventBus.publish(new LobbyCreatedEvent(saved.id, saved.name));
+        await this.cacheManager.set(`lobby:${saved.id}`, saved, 60_000);
         return saved;
     }
 }

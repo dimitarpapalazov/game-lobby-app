@@ -1,20 +1,20 @@
+import { CacheModule } from "@nestjs/cache-manager";
 import { Global, Module } from "@nestjs/common";
-import Redis from "ioredis";
+import { redisStore } from "cache-manager-redis-store";
 
-@Global()
 @Module({
-    providers: [
-        {
-            provide: 'REDIS_CLIENT',
-            useFactory: () => {
-                return new Redis({
-                    host: 'localhost',
-                    port: 6379
-                });
-            },
-        }
+    imports: [
+        CacheModule.registerAsync({
+            isGlobal: true,
+            useFactory: async () => ({
+                store: await redisStore({
+                    socket: { host: 'localhost', port: 6379 },
+                    ttl: 60
+                })
+            })
+        })
     ],
-    exports: ['REDIS_CLIENT']
+    exports: [CacheModule]
 })
 
 export class RedisModule {}

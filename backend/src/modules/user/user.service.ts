@@ -4,7 +4,7 @@ import { User } from "./user.entity.js";
 import { Repository } from "typeorm";
 import { JwtService } from "@nestjs/jwt";
 import bcrypt from "node_modules/bcryptjs/index.js";
-import Redis from "ioredis";
+import { Cache, CACHE_MANAGER } from "@nestjs/cache-manager";
 
 @Injectable()
 export class UserService {
@@ -12,7 +12,7 @@ export class UserService {
     constructor(
         @InjectRepository(User) private userRepository: Repository<User>, 
         private jwtService: JwtService,
-        @Inject('REDIS_CLIENT') private readonly redisClient: Redis) 
+        @Inject(CACHE_MANAGER) private readonly redisClient: Cache) 
         {}
 
     async createUser(email: string, password: string): Promise<User> {
@@ -35,7 +35,7 @@ export class UserService {
     async login(user: User) {
         const payload = { sub: user.id, email: user.email };
         const access_token = this.jwtService.sign(payload);
-        this.redisClient.set(`user:${user.id}:token`, access_token, 'EX', 3600);
+        this.redisClient.set(`user:${user.id}:token`, access_token, 3600);
         return { access_token, userId: user.id };
     }
 
