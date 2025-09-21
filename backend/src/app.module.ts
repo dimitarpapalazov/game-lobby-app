@@ -5,6 +5,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from './modules/user/user.module.js';
 import { RedisModule } from './redis/redis.module.js';
 import { LobbyModule } from './modules/lobby/lobby.module.js';
+import { LobbyGateway } from './gateway/lobby.gateway.js';
+import { LobbyListener } from './listeners/lobby.listener.js';
 
 @Module({
   imports: [
@@ -20,9 +22,9 @@ import { LobbyModule } from './modules/lobby/lobby.module.js';
     }),
     UserModule,
     RedisModule,
-    LobbyModule
+    LobbyModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [AppController, LobbyListener],
+  providers: [AppService, LobbyGateway],
 })
 export class AppModule {}
