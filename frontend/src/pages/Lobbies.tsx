@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { io } from "socket.io-client";
+import { getSocket } from "../services/socket.ts";
 
-const socket = io('http://localhost:3000');
+const socket = getSocket();
 
 export default function Lobbies() {
     const [lobbies, setLobbies] = useState<{ 

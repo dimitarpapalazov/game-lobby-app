@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { io } from "socket.io-client";
+import { getSocket } from "../services/socket.ts";
+import Chat from "./Chat.tsx";
 
-const socket = io('http://localhost:3000');
+const socket = getSocket();
 
 export default function LobbyDetails() {
     const { id } = useParams();
@@ -107,6 +108,10 @@ export default function LobbyDetails() {
                     <li key={p.id}>{p.email}</li>
                 ))}
             </ul>
+            <div>
+                <h2>Lobby chat</h2>
+                <Chat lobbyId={id!} />
+            </div>
             <div>
                 <button onClick={joinLobby}>Join</button>
                 <button onClick={leaveLobby}>Leave</button>

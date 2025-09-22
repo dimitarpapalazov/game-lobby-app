@@ -17,7 +17,7 @@ export class GetLobbyHandler implements IQueryHandler<GetLobbyQuery> {
         const cached = await this.cacheManager.get<Lobby>(`lobby:${query.lobbyId}`);
 
         if (cached) {
-            console.log('Redis hit for lobby', query.lobbyId);
+            // console.log('Redis hit for lobby', query.lobbyId);
             return cached;
         }
 

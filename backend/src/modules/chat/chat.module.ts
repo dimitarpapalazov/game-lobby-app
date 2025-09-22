@@ -17,10 +17,10 @@ import { JwtModule } from "@nestjs/jwt";
     TypeOrmModule.forFeature([ChatMessage, User, Lobby]),
     CqrsModule,
     KafkaModule,
-    JwtModule.register({
-      secret: 'your_jwt_secret', // replace with env variable later
-      signOptions: { expiresIn: '1h' },
-    }),
+    // JwtModule.register({
+    //   secret: 'your_jwt_secret', // replace with env variable later
+    //   signOptions: { expiresIn: '1h' },
+    // }),
   ],
   providers: [
     ChatService,
