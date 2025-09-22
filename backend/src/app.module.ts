@@ -7,6 +7,7 @@ import { RedisModule } from './redis/redis.module.js';
 import { LobbyModule } from './modules/lobby/lobby.module.js';
 import { LobbyGateway } from './gateway/lobby.gateway.js';
 import { LobbyListener } from './listeners/lobby.listener.js';
+import { ChatModule } from './modules/chat/chat.module.js';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { LobbyListener } from './listeners/lobby.listener.js';
     UserModule,
     RedisModule,
     LobbyModule,
+    ChatModule
   ],
   controllers: [AppController, LobbyListener],
   providers: [AppService, LobbyGateway],

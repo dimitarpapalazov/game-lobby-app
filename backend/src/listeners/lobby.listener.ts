@@ -33,4 +33,10 @@ export class LobbyListener implements OnModuleInit {
         console.log('Player left:', message.value);
         this.lobbyGateway.emit('lobby.player.left', message.value);
     }
+
+    @MessagePattern('chat.message.sent')
+    handleChatMessage(@Payload() message: any) {
+        console.log('Chat message:', message.value);
+        this.lobbyGateway.emit(`chat.message.${message.value.lobbyId}`, message.value);
+    }
 }
