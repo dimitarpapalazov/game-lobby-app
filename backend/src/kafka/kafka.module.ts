@@ -1,6 +1,8 @@
 import { Global, Module } from "@nestjs/common";
 import { ClientsModule, Transport } from "@nestjs/microservices";
 
+const kafkaBrokers = (process.env.KAFKA_BROKER || 'kafka:9092').split(',');
+
 @Global()
 @Module({
     imports: [
@@ -11,7 +13,7 @@ import { ClientsModule, Transport } from "@nestjs/microservices";
                 options: {
                     client: {
                         clientId: 'game-platform',
-                        brokers: ['localhost:9092']
+                        brokers: kafkaBrokers
                     },
                     consumer: {
                         groupId: 'game-consumer'

@@ -9,17 +9,23 @@ import { LobbyGateway } from './gateway/lobby.gateway.js';
 import { LobbyListener } from './listeners/lobby.listener.js';
 import { ChatModule } from './modules/chat/chat.module.js';
 
+const username = process.env.POSTGRES_USER || 'postgres';
+const password = process.env.POSTGRES_PASSWORD || 'postgres';
+const database = process.env.POSTGRES_DB || 'postgres';
+const url = process.env.DATABASE_URL;
+
 @Module({
   imports: [
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'localhost',
       port: 5432,
-      username: 'postgres',
-      password: 'postgres',
-      database: 'postgres',
+      username,
+      password,
+      database,
       autoLoadEntities: true,
       synchronize: true,
+      url
     }),
     UserModule,
     RedisModule,

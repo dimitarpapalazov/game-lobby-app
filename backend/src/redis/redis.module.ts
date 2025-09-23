@@ -1,6 +1,9 @@
 import { CacheModule } from "@nestjs/cache-manager";
-import { Global, Module } from "@nestjs/common";
+import { Module } from "@nestjs/common";
 import { redisStore } from "cache-manager-redis-store";
+
+const host = process.env.REDIS_HOST || 'localhost';
+const port = process.env.REDIS_PORT || 6379;
 
 @Module({
     imports: [
@@ -8,7 +11,7 @@ import { redisStore } from "cache-manager-redis-store";
             isGlobal: true,
             useFactory: async () => ({
                 store: await redisStore({
-                    socket: { host: 'localhost', port: 6379 },
+                    socket: { host, port },
                     ttl: 60
                 })
             })
