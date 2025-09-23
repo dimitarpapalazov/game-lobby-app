@@ -10,17 +10,12 @@ import { ChatController } from "./chat.controller.js";
 import { CqrsModule } from "@nestjs/cqrs";
 import { KafkaModule } from "../../kafka/kafka.module.js";
 import { SendMessageEventHandler } from "./event-handlers/chat.event-handlers.js";
-import { JwtModule } from "@nestjs/jwt";
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([ChatMessage, User, Lobby]),
     CqrsModule,
     KafkaModule,
-    // JwtModule.register({
-    //   secret: 'your_jwt_secret', // replace with env variable later
-    //   signOptions: { expiresIn: '1h' },
-    // }),
   ],
   providers: [
     ChatService,

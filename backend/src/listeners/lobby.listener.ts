@@ -13,6 +13,7 @@ export class LobbyListener implements OnModuleInit {
         this.kafka.subscribeToResponseOf('lobby.created');
         this.kafka.subscribeToResponseOf('lobby.player.joined');
         this.kafka.subscribeToResponseOf('lobby.player.left');
+        this.kafka.subscribeToResponseOf('chat.message.sent');
         await this.kafka.connect();
     }
 
